@@ -6,3 +6,9 @@ variable "container_name" {
   type        = string
   default     = "nginx:latest"
 }
+
+variable "scalingo_token" {
+  description = "tk-us-aG73AESgVE2gO6blaT-lqGb7nRL16XqWx0D7sQiFAa5B31uQ"
+  type        = string
+  sensitive   = true
+}
