@@ -83,17 +83,33 @@ variable "adminer_image" {
 }
 
 variable "node_image" {
-  description = "Image Docker de l'API Node.js"
+  description = "Image Docker de l'API Node.js (Express + MongoDB)"
   type        = string
+  default     = "docker.io/varlopecar/express-mongodb-app:latest"
 }
 
 variable "python_image" {
-  description = "Image Docker de l'API Python"
+  description = "Image Docker de l'API Python (FastAPI)"
   type        = string
+  default     = "docker.io/varlopecar/ci_cd_fastapi_ynov:latest"
 }
 
 variable "react_image" {
   description = "Image Docker de l'app React"
   type        = string
+  default     = "docker.io/varlopecar/ci_cd_react_ynov:latest"
+}
+
+# Additional variables for GitHub integration
+variable "github_repository" {
+  description = "GitHub repository name"
+  type        = string
+  default     = "ci-cd"
+}
+
+variable "github_owner" {
+  description = "GitHub repository owner"
+  type        = string
+  default     = "varlopecar"
 }
 

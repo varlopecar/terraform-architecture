@@ -94,6 +94,28 @@ module "docker_environment" {
   backend_port   = 8000
   blog_api_port  = 3001
   adminer_port   = 8080
+  
+  # MongoDB variables
+  mongo_image     = var.mongo_image
+  mongo_user      = var.mongo_user
+  mongo_password  = var.mongo_password
+  mongo_database  = var.mongo_database
+  mongo_atlas_uri = var.mongo_atlas_uri
+  
+  # MySQL variables
+  mysql_image        = var.mysql_image
+  mysql_root_password = var.mysql_root_password
+  mysql_database     = var.mysql_database
+  mysql_user         = var.mysql_user
+  mysql_password     = var.mysql_password
+  
+  # Adminer
+  adminer_image = var.adminer_image
+  
+  # Application images
+  node_image   = var.node_image
+  python_image = var.python_image
+  react_image  = var.react_image
 }
 
 # Scalingo Environment (simplified - just for structure)

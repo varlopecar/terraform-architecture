@@ -1,0 +1,41 @@
+# Terraform variables configuration file
+# Copy this file to terraform.tfvars and fill in your values
+
+# Environment configuration
+environment = "docker"
+
+# GitHub configuration
+github_token = "your-github-token-here"
+github_repository = "ci-cd"
+github_owner = "varlopecar"
+
+# Docker host configuration
+docker_host = "unix:///var/run/docker.sock"
+
+# MongoDB configuration
+mongo_image = "mongo:6"
+mongo_user = "admin"
+mongo_password = "your-secure-password"
+mongo_database = "blog_db"
+mongo_atlas_uri = "" # Leave empty for local MongoDB, or provide Atlas URI
+
+# MySQL configuration
+mysql_image = "mysql:8"
+mysql_root_password = "your-secure-root-password"
+mysql_database = "user_registration"
+mysql_user = "user"
+mysql_password = "your-secure-password"
+
+# Adminer configuration
+adminer_image = "adminer:latest"
+
+# Application images
+node_image = "docker.io/varlopecar/express-mongodb-app:latest"
+python_image = "docker.io/varlopecar/ci_cd_fastapi_ynov:latest"
+react_image = "docker.io/varlopecar/ci_cd_react_ynov:latest"
+
+# Container name
+container_name = "nginx:latest"
+
+# Scalingo configuration (if using Scalingo environment)
+scalingo_token = "your-scalingo-token-here" 
