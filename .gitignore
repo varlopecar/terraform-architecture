@@ -34,21 +34,17 @@ override.tf.json
 .terraformrc
 terraform.rc
 
-# Ignore lock files (optional - you might want to commit these)
-# .terraform.lock.hcl
+# Ignore lock files
+.terraform.lock.hcl
 
 # Ignore any local environment files
 .env
 .env.local
 
-# IDE and editor files
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
+# Ignore logs
+*.log
 
-# OS generated files
+# Ignore OS generated files
 .DS_Store
 .DS_Store?
 ._*

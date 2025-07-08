@@ -1,0 +1,71 @@
+name: Terraform CI
+
+on:
+  push:
+    paths:
+      - 'modules/docker/**'
+      - '.github/workflows/terraform.yml'
+  pull_request:
+    paths:
+      - 'modules/docker/**'
+      - '.github/workflows/terraform.yml'
+
+jobs:
+  terraform_env:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: modules/docker
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.12.2
+      - name: Terraform init
+        run: terraform init
+      - name: Terraform validate
+        run: terraform validate
+      - name: Terraform plan
+        run: terraform plan
+      - name: Terraform apply
+        run: terraform apply --auto-approve
+      - name: Docker ps
+        run: docker ps && sleep 15
+      - name: Check all services are up
+        run: |
+          chmod +x ../../script.sh
+          ../../script.sh
+      - name: Docker ps
+        run: docker ps
+      - name: Terraform destroy
+        run: terraform destroy --auto-approve
+
+  dispatch_to_express_mongodb_app:
+    needs: terraform_env
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fire event to express-mongodb-app
+        run: |
+          curl -L \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.PAT_DISPATCH }}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/varlopecar/express-mongodb-app/dispatches \
+            -d '{"event_type": "trigger-ci"}'
+
+  dispatch_to_react_form:
+    needs: terraform_env
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fire event to react-form
+        run: |
+          curl -L \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.PAT_DISPATCH }}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/varlopecar/react-form/dispatches \
+            -d '{"event_type": "trigger-ci"}' 

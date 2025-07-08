@@ -23,7 +23,4 @@ output "python_api_url" {
   description = "URL d'accès à l'API Python"
 }
 
-output "network_name" {
-  value       = docker_network.app_net.name
-  description = "Nom du réseau Docker"
-} 
+ 

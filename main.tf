@@ -9,10 +9,6 @@ terraform {
       source  = "kreuzwerker/docker"
       version = "~> 3.0"
     }
-    scalingo = {
-      source  = "Scalingo/scalingo"
-      version = "~> 1.0"
-    }
     github = {
       source  = "integrations/github"
       version = "~> 5.0"
@@ -37,13 +33,6 @@ variable "github_token" {
   sensitive   = true
 }
 
-variable "scalingo_token" {
-  description = "Scalingo API token"
-  type        = string
-  sensitive   = true
-  default     = ""
-}
-
 variable "docker_host" {
   description = "Docker host URL"
   type        = string
@@ -53,10 +42,6 @@ variable "docker_host" {
 # Providers
 provider "docker" {
   host = var.docker_host
-}
-
-provider "scalingo" {
-  api_token = var.scalingo_token
 }
 
 provider "github" {
@@ -111,7 +96,7 @@ module "docker_environment" {
   adminer_port   = 8080
 }
 
-# Scalingo Environment
+# Scalingo Environment (simplified - just for structure)
 module "scalingo_environment" {
   count  = var.environment == "scalingo" ? 1 : 0
   source = "./modules/scalingo"
@@ -125,60 +110,10 @@ module "scalingo_environment" {
   github_token = var.github_token
 }
 
-# GitHub Repository Configuration
-resource "github_repository" "main_repo" {
-  name        = local.project_name
-  description = "Full-stack application with React, Python FastAPI, and Node.js"
-  visibility  = "public"
-  
-  has_issues   = true
-  has_wiki     = true
-  has_projects = true
-  
-  auto_init = false
-}
-
-resource "github_repository" "blog_api_repo" {
-  name        = "${local.project_name}-blog-api"
-  description = "Node.js blog API with MongoDB"
-  visibility  = "public"
-  
-  has_issues   = true
-  has_wiki     = true
-  has_projects = true
-  
-  auto_init = false
-}
-
-# GitHub Actions Workflows
-resource "github_actions_secret" "scalingo_token" {
-  count      = var.environment == "scalingo" ? 1 : 0
-  repository = github_repository.main_repo.name
-  secret_name = "SCALINGO_TOKEN"
-  plaintext_value = var.scalingo_token
-}
-
-resource "github_actions_secret" "docker_host" {
-  count      = var.environment == "docker" ? 1 : 0
-  repository = github_repository.main_repo.name
-  secret_name = "DOCKER_HOST"
-  plaintext_value = var.docker_host
-}
-
 # Outputs
 output "environment" {
   description = "Current environment"
   value       = var.environment
-}
-
-output "github_repository_url" {
-  description = "Main repository URL"
-  value       = github_repository.main_repo.html_url
-}
-
-output "blog_api_repository_url" {
-  description = "Blog API repository URL"
-  value       = github_repository.blog_api_repo.html_url
 }
 
 output "docker_network_name" {
